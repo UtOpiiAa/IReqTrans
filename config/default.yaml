@@ -1,0 +1,92 @@
+# ==============================================================================
+# RE-LLM 项目配置文件
+# ==============================================================================
+
+# ==================== 项目路径配置 ====================
+project:
+  # 项目根目录下的数据文件夹
+  data_dir: "data"
+
+# ==================== LLM 模型配置 ====================
+llm:
+  # 本地模型路径或 HuggingFace Model ID
+  model_name: "Qwen/Qwen3-8B"
+  temperature: 0.0
+  max_tokens: 8191
+
+# ==================== Embedding 模型配置 ====================
+embedding:
+  # 本地模型路径或 HuggingFace Model ID
+  model_name: "Qwen/Qwen3-Embedding-0.6B"
+  max_tokens: 8191
+
+# ==================== RAG 配置 ====================
+rag:
+  # 知识库文件路径（相对于 data_dir）
+  knowledge_path: "knowledge/om_knowledge.xlsx"
+  implicit_knowledge_path: "knowledge/knowledge_implicit.xlsx"
+  requirements_train_path: "knowledge/requirements_train.xlsx"
+  requirements_test_path: "knowledge/requirements_test.xlsx"
+  formal_code_path: "knowledge/reqv039.xlsx"
+
+  # 检索参数
+  retrieval_top_k: 3
+  use_embedding: true
+  embedding_cache_dir: "model/embedding_cache"
+
+  # 知识库列权重配置 - OM模式
+  om_keyword_weight: 0.6
+  om_function_weight: 0.4
+
+  # 知识库列权重配置 - 显式知识模式 (4列)
+  source_keyword_weight: 0.6
+  formal_element_weight: 0.2
+  description_weight: 0.1
+  example_context_weight: 0.1
+
+  # 动态RAG参数
+  hallucination_threshold: 0.8
+  batch_size: 64
+
+  # TokenRAG 参数
+  attention_threshold_percentile: 75.0
+
+  # FLARE 参数
+  look_ahead_steps: 64
+  low_confidence_threshold: 0.4
+  filter_confidence_threshold: 0.8
+  retrieval_frequency: 64
+  max_query_length: 64
+
+  # FixedLengthRAG 参数
+  retrieval_interval: 50
+
+  # FixedSentenceRAG 参数
+  sentence_delimiter: ";"
+
+# ==================== 输出配置 ====================
+output:
+  result_dir: "data/result"
+  log_dir: "logs"
+
+# ==================== 知识提取配置 ====================
+extraction:
+  # API 配置（用于调用外部 LLM 提取知识）
+  api:
+    base_url: "https://api.openai.com/v1"
+    api_key: "YOUR_API_KEY"
+    model: "gpt-4"
+    max_tokens: 4096
+    temperature: 0.3
+    timeout: 120
+
+  # 文件路径（相对于 data_dir）
+  requirements_file: "knowledge/requirements.xlsx"
+  formal_code_file: "knowledge/reqv052.xlsx"
+  output_dir: "extraction_output"
+
+  # 处理控制
+  sleep_interval: 1.0
+  max_retries: 3
+  retry_delay: 5
+  start_index: 0
